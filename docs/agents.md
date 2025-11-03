@@ -113,6 +113,14 @@ When debugging collaboratively (AI + Human), follow this methodology:
    - **Watch mode**: Observes actual run after baseline established
    - **Benefits**: Catches regressions, patterns, repetitive bugs, missed changes before they propagate
 
+   **Notebook Browser Launch Pattern** (Meta-Document Debugging):
+   - **Problem**: IDE notebook viewer is "horrible" for visualizations (Mermaid, Matplotlib)
+   - **Solution**: Each notebook has "Launch Notebook in Browser" cell at the end
+   - **Implementation**: Uses Playwright to launch Jupyter server + open notebook in Chromium
+   - **Benefits**: Full automation hooks, better visualization, debugging capabilities
+   - **Pattern**: "Meta-document" - using the notebook itself to debug the notebook
+   - **Connection**: Inspired by IDE browser button features (e.g., Codex), but provides full Playwright automation hooks
+
 5. **Avoid Premature Hypothesizing**: 
    - Don't jump to conclusions (kernel state, cache, old bugs)
    - Check the actual data/state first
@@ -384,6 +392,27 @@ From `openflow-pr-update-pack/OpenFlow-Playground/agent_network_personalities.md
 - NETWORK_DIAGNOSTICS maintains system health
 
 ## Universal Patterns for Beast Projects
+
+### Beast Skeleton Requirement
+
+**MANDATORY RULE:** When creating a new Beast project repository, it MUST include the complete Beast skeleton structure from the initial commit.
+
+**Why:** 
+- Ensures consistent structure across all Beast projects
+- Prevents missing directories in git clones (empty directories aren't tracked by git)
+- Ensures KiroBeast infrastructure is ready from day one
+- Makes projects OSS-ready immediately
+
+**Requirements:** See `.kiro/steering/BEAST_SKELETON.md` for complete skeleton definition.
+
+**Key Points:**
+- All required directories must exist (with `.gitkeep` or `__init__.py`)
+- Python packages use `__init__.py` (not `.gitkeep`)
+- Empty non-Python directories use `.gitkeep` files
+- KiroBeast infrastructure must be present from initial commit
+- Git remote must be configured: `nkllon/beast-*`
+
+**Rule Location:** `.kiro/settings/rules/beast-skeleton-requirement.md`
 
 ### Naming Conventions
 
