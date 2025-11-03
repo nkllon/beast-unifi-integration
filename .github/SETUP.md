@@ -27,21 +27,39 @@ git push -u origin main
 
 ## 3. Configure GitHub Secrets
 
+### Option A: Using the Setup Script (Recommended)
+```bash
+./scripts/setup_github_secrets.sh
+```
+
+This interactive script will guide you through adding both secrets.
+
+### Option B: Using GitHub CLI
+```bash
+# Add SONAR_TOKEN
+gh secret set SONAR_TOKEN --repo nkllon/beast-unifi-integration --body "your-token-here"
+
+# Add PYPI_API_TOKEN (optional)
+gh secret set PYPI_API_TOKEN --repo nkllon/beast-unifi-integration --body "your-token-here"
+```
+
+### Option C: Using GitHub Web UI
 Navigate to: **Settings → Secrets and variables → Actions**
 
 Add the following secrets:
 
-### SONAR_TOKEN
+#### SONAR_TOKEN (Required)
 1. Go to [SonarCloud](https://sonarcloud.io/)
-2. Navigate to **My Account → Security**
-3. Generate a new token
-4. Copy token and add as `SONAR_TOKEN` secret
+2. Sign in with GitHub
+3. Navigate to **My Account → Security**
+4. Generate a new token
+5. Copy token and add as `SONAR_TOKEN` secret in GitHub
 
-### PYPI_API_TOKEN (Optional, for publishing)
+#### PYPI_API_TOKEN (Optional, for publishing)
 1. Go to [PyPI Account Settings](https://pypi.org/manage/account/)
 2. Navigate to **API tokens**
-3. Create a new API token
-4. Copy token and add as `PYPI_API_TOKEN` secret
+3. Create a new API token (project scope recommended)
+4. Copy token and add as `PYPI_API_TOKEN` secret in GitHub
 
 ## 4. Set Up SonarCloud Project
 
