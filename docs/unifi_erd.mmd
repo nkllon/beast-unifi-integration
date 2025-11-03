@@ -1,0 +1,31 @@
+erDiagram
+    hosts {
+        id string PK
+        hardwareId string
+        type string
+        ipAddress string
+        userData.status string
+        reportedState.controller_uuid string
+        reportedState.hardware_id string
+        reportedState.host_type number
+        ... 85 more columns
+    }
+
+    sites {
+        siteId string PK
+        hostId string
+        meta.name string
+        statistics.counts.offlineWifiDevice number
+        statistics.counts.wifiDevice number
+        meta.gatewayMac string
+        statistics.gateway.hardwareId string
+        statistics.gateway.ipsMode string
+        ... 28 more columns
+    }
+
+    devices {
+        hostId string PK
+        ... 1 more columns
+    }
+
+    devices ||--o{ sites : "hostId"

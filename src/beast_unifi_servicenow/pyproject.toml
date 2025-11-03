@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "beast-unifi-servicenow"
+version = "0.1.0"
+description = "ServiceNow integration for UniFi network data via Beastmaster framework"
+readme = "../../README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Lou Springer", email = "lou@example.com"},
+]
+keywords = ["unifi", "servicenow", "integration", "cmdb", "mid-server"]
+dependencies = [
+    "beast-unifi>=0.1.0",
+    "requests>=2.31.0",
+    "pydantic>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/nkllon/beast-unifi-integration"
+Repository = "https://github.com/nkllon/beast-unifi-integration"
+Documentation = "https://github.com/nkllon/beast-unifi-integration#readme"
+"Bug Tracker" = "https://github.com/nkllon/beast-unifi-integration/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["beast_unifi_servicenow"]
+
