@@ -30,7 +30,7 @@ def load_credentials_from_1password(vault_name: str = "Beastmaster") -> Dict[str
         try:
             result = subprocess.run(
                 ['op', 'item', 'get', item_name, '--vault', vault_name,
-                 '--fields', field_name, '--format', 'json'],
+                 '--fields', field_name, '--format', 'json', '--reveal'],
                 capture_output=True,
                 text=True,
                 timeout=10
@@ -46,13 +46,19 @@ def load_credentials_from_1password(vault_name: str = "Beastmaster") -> Dict[str
                     else:
                         value = result.stdout.strip()
                     
+                    # Check if value is actually a revealed secret or just a placeholder
                     if value:
+                        # 1Password CLI returns placeholder strings when field isn't revealed
+                        if value.startswith("[use 'op item get") or "--reveal" in value.lower():
+                            # Skip this credential - it's a placeholder string
+                            continue
                         credentials[env_var] = value
                         os.environ[env_var] = value
                 except json.JSONDecodeError:
                     # Sometimes op returns plain text
                     value = result.stdout.strip()
-                    if value:
+                    # Check if value is actually a revealed secret or just a placeholder
+                    if value and not value.startswith("[use 'op item get") and not "--reveal" in value.lower():
                         credentials[env_var] = value
                         os.environ[env_var] = value
         except Exception:

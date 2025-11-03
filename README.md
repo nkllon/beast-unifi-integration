@@ -80,6 +80,7 @@ beast-unifi-integration/
 - [API Reference](docs/api_reference.md)
 - [ServiceNow Setup](docs/servicenow_setup.md)
 - [Architecture](docs/architecture.md)
+- [GitLab Docker Setup](docs/gitlab_docker_setup.md) - Private Docker registry on Vonnegut
 
 ## Contributing
 
