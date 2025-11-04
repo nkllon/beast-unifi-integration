@@ -90,3 +90,4 @@ dmypy.json
 # ServiceNow MID Server
 mid.env
 
+META-INF/
