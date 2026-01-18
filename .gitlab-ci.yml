@@ -1,0 +1,72 @@
+stages:
+  - build
+  - push
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  IMAGE_TAG_LATEST: $CI_REGISTRY_IMAGE:latest
+
+# Build and push Docker image to GitLab Container Registry
+docker-build:
+  stage: build
+  image: docker:24-dind
+  services:
+    - docker:24-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - |
+      cd src/beast_unifi_servicenow/mid_server/docker
+      docker build
+        --build-arg MID_INSTALLATION_URL="${MID_INSTALLATION_URL:-https://install.service-now.com/glide/distribution/builds/package/app-signed/mid/2025/10/12/mid.zurich-07-01-2025__patch2-09-24-2025_10-12-2025_0904.linux.x86-64.zip}"
+        --build-arg MID_SIGNATURE_VERIFICATION="${MID_SIGNATURE_VERIFICATION:-TRUE}"
+        --build-arg MID_USERNAME="${MID_USERNAME:-mid}"
+        --build-arg GROUP_ID="${GROUP_ID:-1001}"
+        --build-arg USER_ID="${USER_ID:-1001}"
+        -t $IMAGE_TAG
+        -t $IMAGE_TAG_LATEST
+        .
+    - docker push $IMAGE_TAG
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "main" ] || [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        docker push $IMAGE_TAG_LATEST
+      fi
+  only:
+    - branches
+    - tags
+  tags:
+    - docker
+
+# Optional: Build multi-arch images (requires buildx)
+# Uncomment if you need ARM64 support
+# docker-buildx:
+#   stage: build
+#   image: docker:24-dind
+#   services:
+#     - docker:24-dind
+#   before_script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker buildx create --use --name builder
+#     - docker buildx inspect --bootstrap
+#   script:
+#     - |
+#       cd src/beast_unifi_servicenow/mid_server/docker
+#       docker buildx build
+#         --platform linux/amd64,linux/arm64
+#         --build-arg MID_INSTALLATION_URL="${MID_INSTALLATION_URL}"
+#         --build-arg MID_SIGNATURE_VERIFICATION="${MID_SIGNATURE_VERIFICATION:-TRUE}"
+#         --build-arg MID_USERNAME="${MID_USERNAME:-mid}"
+#         --build-arg GROUP_ID="${GROUP_ID:-1001}"
+#         --build-arg USER_ID="${USER_ID:-1001}"
+#         --push
+#         -t $IMAGE_TAG
+#         -t $IMAGE_TAG_LATEST
+#         .
+#   only:
+#     - branches
+#     - tags
+#   tags:
+#     - docker
+

@@ -1,0 +1,16 @@
+{
+  "feature": "unifi-api-client",
+  "title": "UniFi API Client Library",
+  "status": "delivered",
+  "created": "2025-11-03",
+  "description": "Python library for interacting with UniFi Site Manager API (cloud) and Local Controller API (on-premises)",
+  "components": [
+    "SiteManagerClient",
+    "LocalControllerClient"
+  ],
+  "files": [
+    "src/beast_unifi/api/site_manager.py",
+    "src/beast_unifi/api/local_controller.py"
+  ]
+}
+
